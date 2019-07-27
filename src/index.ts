@@ -11,7 +11,7 @@ createConnection()
     const server = new ApolloServer({ schema });
 
     server.listen(5000).then(({ url }) => {
-      console.log(`Server E listening on ${url}`);
+      console.log(`Server listening on ${url}`);
     });
   })
   .catch((error) => console.log(error));
