@@ -1,0 +1,46 @@
+version: '2.1'
+
+services:
+  exclamate-gql:
+    build: .
+    image: exclamate-gql:0.0.1
+    env_file: .env
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - exclamate-network
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: development
+    ports:
+      - 5000:5000
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: exclamate-db
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - exclamate-network
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 6400:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+    networks:
+      - exclamate-network
+    depends_on:
+      - db
+
+networks:
+  exclamate-network:
+    driver: bridge
