@@ -1,8 +1,8 @@
 import { gql, makeExecutableSchema } from 'apollo-server';
 import { merge } from 'lodash';
 
-import { typeDefs as userTypeDefs } from './typeDefs/userType';
 import { resolvers as userResolvers } from './resolvers/userResolvers';
+import { typeDefs as userTypeDefs } from './typeDefs/userType';
 
 const typeDefs = gql`
   type Query {

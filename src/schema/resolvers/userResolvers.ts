@@ -1,46 +1,65 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server';
+import * as bcrypt from 'bcrypt';
 import { IResolverObject } from 'graphql-tools';
+import { getLogger } from 'log4js';
 import { Like } from 'typeorm';
 
 import { User } from '../../entity/User';
+import { createToken } from '../../util/auth';
+
+const logger = getLogger('userResolvers.ts');
 
 export const resolvers: IResolverObject = {
   Query: {
     hello: () => {
       return 'World';
     },
-    login: (_, { username, password }) => {
-      return User.findOne({
-        where: {
-          username: Like(username),
-        },
-      }).then((user) => {
-        console.log(user);
+    login: async (_, { username, password }) => {
+      try {
+        const user = await User.findOne({
+          where: {
+            username: Like(username),
+          },
+        });
+
         if (!user) {
           throw new AuthenticationError('User not found');
         }
-        if (password !== user.password) {
+        logger.debug(user);
+
+        if (await bcrypt.compare(password, user.password)) {
+          return {
+            token: createToken(user),
+          };
+        } else {
           throw new AuthenticationError('Invalid password');
         }
-        return user.id;
-      });
+      } catch (error) {
+        logger.error(error);
+        throw error;
+      }
     },
   },
   Mutation: {
-    register: (_, { userData }) => {
+    register: async (_, { userData }) => {
       const { username, password, firstName, lastName, email } = userData;
 
-      return User.findOne({ username }).then((user) => {
-        if (user) {
-          throw new ForbiddenError('User already exists');
-        }
-        return User.create({ username, password, firstName, lastName, email })
-          .save()
-          .then((user) => {
-            console.log('new user', user);
-            return user.id;
-          });
-      });
+      const user = await User.findOne({ username });
+      if (user) {
+        throw new ForbiddenError('User already exists');
+      }
+
+      const newUser = await User.create({
+        username,
+        password: await bcrypt.hash(password, 10),
+        firstName,
+        lastName,
+        email,
+      }).save();
+
+      delete newUser.password;
+      logger.debug('new user', newUser);
+      return { user: newUser, token: createToken(newUser) };
     },
   },
 };
