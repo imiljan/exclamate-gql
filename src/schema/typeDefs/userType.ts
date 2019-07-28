@@ -10,30 +10,25 @@ export const typeDefs = gql`
     password: String!
   }
 
+  input RegisterInput {
+    username: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+  }
+
   extend type Query {
     hello: String!
     login(username: String!, password: String!): ID
+  }
+
+  extend type Mutation {
+    register(userData: RegisterInput): ID!
   }
 `;
 /*
   type Token {
     token: String!
   }
-
-  extend type Query {
-    getUser(id: ID!): User!
-    login(username: String!, password: String!): Token
-  }
-
-  extend type Mutation {
-    register(
-      username: String!
-      password: String!
-      repeatPassword: String!
-      firstName: String!
-      lastName: String!
-      email: String!
-    ): Token
-  }
-`;
 */
