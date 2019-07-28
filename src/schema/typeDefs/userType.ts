@@ -7,7 +7,15 @@ export const typeDefs = gql`
     firstName: String!
     lastName: String!
     email: String!
-    password: String!
+  }
+
+  type Token {
+    token: String!
+  }
+
+  type RegisterResponse {
+    user: User
+    token: String
   }
 
   input RegisterInput {
@@ -20,15 +28,11 @@ export const typeDefs = gql`
 
   extend type Query {
     hello: String!
-    login(username: String!, password: String!): ID
+    login(username: String!, password: String!): Token!
+    me: User!
   }
 
   extend type Mutation {
-    register(userData: RegisterInput): ID!
+    register(userData: RegisterInput): RegisterResponse!
   }
 `;
-/*
-  type Token {
-    token: String!
-  }
-*/
