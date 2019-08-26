@@ -4,6 +4,7 @@ services:
   exclamate-gql:
     build: .
     image: exclamate-gql:0.0.1
+    container_name: exclamate-back
     env_file: .env
     volumes:
       - .:/usr/src/app
@@ -16,26 +17,26 @@ services:
     ports:
       - 5000:5000
   db:
-    image: postgres
+    image: mysql:8.0
+    container_name: exclamate-db
+    command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 5432:5432
+      - 3306:3306
+    restart: always
     environment:
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgress
-      POSTGRES_DB: exclamate-db
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+      MYSQL_DATABASE: exclamate-db
+      MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./data/mysql:/var/lib/mysql
     networks:
       - exclamate-network
-  pgadmin:
-    image: dpage/pgadmin4
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: exclamate-phpmyadmin
     ports:
-      - 6400:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    volumes:
-      - ./data/pgadmin:/var/lib/pgadmin
+      - 8080:80
     networks:
       - exclamate-network
     depends_on:
