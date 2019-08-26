@@ -2,10 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "es5",
-      "es6"
-    ],
+    "lib": ["es5", "es6"],
     "sourceMap": true,
     "outDir": "./dist",
     "removeComments": true,
@@ -19,7 +16,7 @@
     "alwaysStrict": true,
     /* Additional Checks */
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     /* Module Resolution Options */
@@ -30,7 +27,5 @@
     "emitDecoratorMetadata": true
     /* Enables experimental support for emitting type metadata for decorators. */
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
