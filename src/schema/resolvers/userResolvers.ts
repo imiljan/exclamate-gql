@@ -14,6 +14,7 @@ export const resolvers: Resolvers = {
     hello: () => {
       return 'World';
     },
+    me: (_, __, ctx) => ctx.user,
     login: async (_, { username, password }) => {
       try {
         const user = await User.findOne({

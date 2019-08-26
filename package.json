@@ -23,6 +23,8 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.6.1",
+    "@graphql-codegen/typescript": "1.6.1",
+    "@graphql-codegen/typescript-resolvers": "1.6.1",
     "@types/bcrypt": "^3.0.0",
     "@types/dotenv": "^6.1.1",
     "@types/jsonwebtoken": "^8.3.2",
@@ -33,9 +35,6 @@
     "ts-node": "3.3.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.1",
-    "@graphql-codegen/typescript": "1.6.1",
-    "@graphql-codegen/typescript-resolvers": "1.6.1",
-    "@graphql-codegen/introspection": "1.6.1"
+    "typescript": "^3.5.1"
   }
 }
