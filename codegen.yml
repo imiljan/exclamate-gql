@@ -1,0 +1,16 @@
+overwrite: true
+schema: 'http://localhost:5000'
+documents: null
+generates:
+  src/generated/graphql.ts:
+    config:
+      scalars:
+        ID: number
+      useIndexSignature: true
+      contextType: ../#Context
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

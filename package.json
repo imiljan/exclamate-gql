@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "apollo-server": "^2.7.2",
@@ -21,6 +22,7 @@
     "typeorm": "0.2.18"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.6.1",
     "@types/bcrypt": "^3.0.0",
     "@types/dotenv": "^6.1.1",
     "@types/jsonwebtoken": "^8.3.2",
@@ -31,6 +33,9 @@
     "ts-node": "3.3.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.1",
+    "@graphql-codegen/typescript": "1.6.1",
+    "@graphql-codegen/typescript-resolvers": "1.6.1",
+    "@graphql-codegen/introspection": "1.6.1"
   }
 }

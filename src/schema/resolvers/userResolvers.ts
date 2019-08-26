@@ -1,15 +1,15 @@
-import { AuthenticationError, ForbiddenError } from 'apollo-server';
+import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server';
 import * as bcrypt from 'bcrypt';
-import { IResolverObject } from 'graphql-tools';
 import { getLogger } from 'log4js';
 import { Like } from 'typeorm';
 
 import { User } from '../../entity/User';
+import { Resolvers } from '../../generated/graphql';
 import { createToken } from '../../util/auth';
 
 const logger = getLogger('userResolvers.ts');
 
-export const resolvers: IResolverObject = {
+export const resolvers: Resolvers = {
   Query: {
     hello: () => {
       return 'World';
@@ -42,6 +42,9 @@ export const resolvers: IResolverObject = {
   },
   Mutation: {
     register: async (_, { userData }) => {
+      if (!userData) {
+        throw new ApolloError('Bad input params');
+      }
       const { username, password, firstName, lastName, email } = userData;
 
       const user = await User.findOne({ username });

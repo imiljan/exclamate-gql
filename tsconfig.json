@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es5", "es6"],
+    "lib": ["es5", "es6", "esnext.asynciterable"],
     "sourceMap": true,
     "outDir": "./dist",
     "removeComments": true,

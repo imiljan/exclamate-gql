@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import * as log4js from 'log4js';
 import { createConnection } from 'typeorm';
 
+import { User } from './entity/User';
 import schema from './schema';
 import { getUser } from './util/auth';
 
@@ -20,6 +21,10 @@ log4js.configure({
 });
 
 const logger = log4js.getLogger('index.ts');
+
+export interface Context {
+  user: User;
+}
 
 createConnection()
   .then(() => {
