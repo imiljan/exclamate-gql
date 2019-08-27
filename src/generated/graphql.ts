@@ -45,6 +45,7 @@ export type Query = {
   login: Token,
   me: User,
   getPost?: Maybe<Post>,
+  getPosts: Array<Maybe<Post>>,
 };
 
 
@@ -208,6 +209,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   login?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'username' | 'password'>>,
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,
+  getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>,
 }>;
 
 export type RegisterResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RegisterResponse'] = ResolversParentTypes['RegisterResponse']> = ResolversObject<{

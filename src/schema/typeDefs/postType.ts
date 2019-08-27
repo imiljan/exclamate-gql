@@ -13,6 +13,7 @@ export const typeDefs = gql`
 
   extend type Query {
     getPost(id: ID!): Post
+    getPosts: [Post]!
   }
 
   extend type Mutation {
