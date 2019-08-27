@@ -4,7 +4,7 @@ export const typeDefs = gql`
   type Post {
     id: ID!
     body: String!
-    # created: String #TODO Date Scalar
+    created: Date!
   }
 
   extend type User {
@@ -15,6 +15,7 @@ export const typeDefs = gql`
     getPost(id: ID!): Post
   }
 
-  # extend type Mutation {
-  # }
+  extend type Mutation {
+    createPost(body: String!): Post!
+  }
 `;

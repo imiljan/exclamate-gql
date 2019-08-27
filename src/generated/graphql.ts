@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '../';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -9,12 +9,16 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  /** Date custom scalar type */
+  Date: any,
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation',
   _?: Maybe<Scalars['Boolean']>,
   register: RegisterResponse,
+  createPost: Post,
 };
 
 
@@ -22,10 +26,16 @@ export type MutationRegisterArgs = {
   userData?: Maybe<RegisterInput>
 };
 
+
+export type MutationCreatePostArgs = {
+  body: Scalars['String']
+};
+
 export type Post = {
   __typename?: 'Post',
   id: Scalars['ID'],
   body: Scalars['String'],
+  created: Scalars['Date'],
 };
 
 export type Query = {
@@ -155,6 +165,7 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Post: ResolverTypeWrapper<Post>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
   Mutation: ResolverTypeWrapper<{}>,
   RegisterInput: RegisterInput,
   RegisterResponse: ResolverTypeWrapper<RegisterResponse>,
@@ -169,19 +180,26 @@ export type ResolversParentTypes = ResolversObject<{
   User: User,
   ID: Scalars['ID'],
   Post: Post,
+  Date: Scalars['Date'],
   Mutation: {},
   RegisterInput: RegisterInput,
   RegisterResponse: RegisterResponse,
 }>;
 
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date'
+}
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   register?: Resolver<ResolversTypes['RegisterResponse'], ParentType, ContextType, MutationRegisterArgs>,
+  createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body'>>,
 }>;
 
 export type PostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  created?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -211,6 +229,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Date?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

@@ -14,7 +14,12 @@ export const resolvers: Resolvers = {
     hello: () => {
       return 'World';
     },
-    me: (_, __, ctx) => ctx.user,
+    me: (_, __, { user }) => {
+      if (!user) {
+        throw new ForbiddenError('User not logged in');
+      }
+      return user;
+    },
     login: async (_, { username, password }) => {
       try {
         const user = await User.findOne({

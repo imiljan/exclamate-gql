@@ -7,13 +7,14 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "generate:watch": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
-    "apollo-server": "^2.7.2",
+    "apollo-server": "^2.9.0",
     "bcrypt": "^3.0.6",
-    "dotenv": "^8.0.0",
-    "graphql": "^14.4.2",
+    "dotenv": "^8.1.0",
+    "graphql": "^14.5.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "log4js": "^4.5.1",
@@ -27,13 +28,13 @@
     "@graphql-codegen/typescript-resolvers": "1.6.1",
     "@types/bcrypt": "^3.0.0",
     "@types/dotenv": "^6.1.1",
-    "@types/jsonwebtoken": "^8.3.2",
-    "@types/lodash": "^4.14.136",
-    "@types/node": "^8.0.29",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/lodash": "^4.14.137",
+    "@types/node": "^8.10.52",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
     "ts-node": "3.3.0",
-    "tslint": "^5.18.0",
+    "tslint": "^5.19.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1"
   }
