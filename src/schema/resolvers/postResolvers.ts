@@ -1,12 +1,12 @@
 import { ForbiddenError } from 'apollo-server';
+import { getLogger } from 'log4js';
 import { In } from 'typeorm';
 
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
 
-// import { getLogger } from 'log4js';
-// const logger = getLogger('userResolvers.ts');
+const logger = getLogger('postResolvers.ts');
 
 export const resolvers: Resolvers = {
   User: {
@@ -32,7 +32,7 @@ export const resolvers: Resolvers = {
         whereConditions.push({ user: In(userWithFollowings.followings.map((e) => e.id)) });
       }
 
-      return Post.find({
+      const p = await Post.find({
         where: whereConditions,
         relations: ['comments', 'medias'],
         order: {
@@ -40,6 +40,8 @@ export const resolvers: Resolvers = {
           id: 'ASC',
         },
       });
+      logger.info(p);
+      return p;
     },
   },
   Mutation: {

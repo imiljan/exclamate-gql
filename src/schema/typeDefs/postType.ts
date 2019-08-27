@@ -5,6 +5,7 @@ export const typeDefs = gql`
     id: ID!
     body: String!
     created: Date!
+    user: User!
   }
 
   extend type User {

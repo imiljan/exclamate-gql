@@ -25,7 +25,11 @@ export class Post extends BaseEntity {
   @CreateDateColumn({ name: 'createdDate' })
   created: Date;
 
-  @ManyToOne((type) => User, (user) => user.posts, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne((type) => User, (user) => user.posts, {
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 
   @OneToMany((type) => Comment, (comment) => comment.post)
