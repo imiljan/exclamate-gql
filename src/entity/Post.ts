@@ -48,4 +48,6 @@ export class Post extends BaseEntity {
     inverseJoinColumn: { name: 'userId', referencedColumnName: 'id' },
   })
   usersLiked: User[];
+
+  likes: number;
 }

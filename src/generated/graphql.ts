@@ -46,12 +46,12 @@ export type Post = {
   created: Scalars['Date'],
   user: User,
   comments: Array<Maybe<Comment>>,
+  likes: Scalars['Int'],
 };
 
 export type Query = {
   __typename?: 'Query',
   _?: Maybe<Scalars['Boolean']>,
-  hello: Scalars['String'],
   login: Token,
   me: User,
   getPost?: Maybe<Post>,
@@ -178,6 +178,7 @@ export type ResolversTypes = ResolversObject<{
   Post: ResolverTypeWrapper<Post>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Comment: ResolverTypeWrapper<Comment>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   Mutation: ResolverTypeWrapper<{}>,
   RegisterInput: RegisterInput,
   RegisterResponse: ResolverTypeWrapper<RegisterResponse>,
@@ -194,6 +195,7 @@ export type ResolversParentTypes = ResolversObject<{
   Post: Post,
   Date: Scalars['Date'],
   Comment: Comment,
+  Int: Scalars['Int'],
   Mutation: {},
   RegisterInput: RegisterInput,
   RegisterResponse: RegisterResponse,
@@ -222,11 +224,11 @@ export type PostResolvers<ContextType = Context, ParentType extends ResolversPar
   created?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   comments?: Resolver<Array<Maybe<ResolversTypes['Comment']>>, ParentType, ContextType>,
+  likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   login?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'username' | 'password'>>,
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,

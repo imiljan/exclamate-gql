@@ -11,9 +11,6 @@ const logger = getLogger('userResolvers.ts');
 
 export const resolvers: Resolvers = {
   Query: {
-    hello: () => {
-      return 'World';
-    },
     me: (_, __, { user }) => {
       if (!user) {
         throw new ForbiddenError('User not logged in');

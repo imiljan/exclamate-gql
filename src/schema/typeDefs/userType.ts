@@ -27,7 +27,6 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    hello: String!
     login(username: String!, password: String!): Token!
     me: User!
   }
