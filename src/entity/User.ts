@@ -14,6 +14,7 @@ import {
 import { Comment } from './Comment';
 import { Device } from './Device';
 import { Media } from './Media';
+import { Message } from './Message';
 import { Notification } from './Notification';
 import { Post } from './Post';
 
@@ -71,4 +72,10 @@ export class User extends BaseEntity {
     inverseJoinColumn: { name: 'followedUserId', referencedColumnName: 'id' },
   })
   followings: User[];
+
+  @OneToMany((type) => Message, (message) => message.sender)
+  sentMessages: Message[];
+
+  @OneToMany((type) => Message, (message) => message.receiver)
+  receivedMessages: Message[];
 }

@@ -1,33 +1,43 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Chat } from './Chat';
+import { User } from './User';
 
 @Entity()
 export class Message extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'messageId' })
   id: number;
 
-  @PrimaryColumn({ name: 'userId1' })
-  participant1: number;
+  @PrimaryColumn({ name: 'senderId' })
+  senderId: number;
 
-  @PrimaryColumn({ name: 'userId2' })
-  participant2: number;
+  @PrimaryColumn({ name: 'receiverId' })
+  receiverId: number;
 
   @Column({ name: 'messageBody' })
   body: string;
 
-  @ManyToOne((type) => Chat, (chat) => chat.messages)
-  @JoinColumn([
-    { name: 'userId1', referencedColumnName: 'participant1' },
-    { name: 'userId2', referencedColumnName: 'participant2' },
-  ])
-  chat: Chat;
+  @CreateDateColumn()
+  created: Date;
+
+  @ManyToOne(() => User, (user) => user.sentMessages, {
+    primary: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  sender: User;
+
+  @ManyToOne(() => User, (user) => user.receiverMessages, {
+    primary: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  receiver: User;
 }

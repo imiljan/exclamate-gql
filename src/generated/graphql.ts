@@ -36,6 +36,7 @@ export type Post = {
   id: Scalars['ID'],
   body: Scalars['String'],
   created: Scalars['Date'],
+  user: User,
 };
 
 export type Query = {
@@ -201,6 +202,7 @@ export type PostResolvers<ContextType = Context, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   created?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
