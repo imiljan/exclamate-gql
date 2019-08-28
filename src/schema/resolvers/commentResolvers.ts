@@ -1,7 +1,7 @@
 // import { getLogger } from 'log4js';
 import { Resolvers } from '../../generated/graphql';
 
-// const logger = getLogger('postResolvers.ts');
+// const logger = getLogger('commentResolvers.ts');
 
 export const resolvers: Resolvers = {
   Query: {},

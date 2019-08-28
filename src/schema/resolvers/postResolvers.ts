@@ -9,12 +9,9 @@ import { Resolvers } from '../../generated/graphql';
 // const logger = getLogger('postResolvers.ts');
 
 export const resolvers: Resolvers = {
-  User: {
-    posts: (_, __, { user }) => Post.find({ where: { user } }),
-  },
   Post: {
-    comments: (post, __, { user }) =>
-      Comment.find({ where: { post: post.id }, relations: ['user'] }),
+    // TODO Check if this is needed because there is join on getPost query
+    comments: (post) => Comment.find({ where: { post: post.id }, relations: ['user'] }),
     // TODO Check if this can be achieved in query builder
     likes: async (post) => {
       const numberOfLikes = await getManager().query(
@@ -47,7 +44,7 @@ export const resolvers: Resolvers = {
 
       const p = await Post.find({
         where: whereConditions,
-        relations: ['comments', 'medias'],
+        relations: ['comments'],
         order: {
           created: 'DESC',
           id: 'ASC',

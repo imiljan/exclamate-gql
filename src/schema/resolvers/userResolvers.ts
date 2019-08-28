@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { getLogger } from 'log4js';
 import { Like } from 'typeorm';
 
+import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
 import { createToken } from '../../util/auth';
@@ -10,6 +11,9 @@ import { createToken } from '../../util/auth';
 const logger = getLogger('userResolvers.ts');
 
 export const resolvers: Resolvers = {
+  User: {
+    posts: (_, __, { user }) => Post.find({ where: { user } }),
+  },
   Query: {
     me: (_, __, { user }) => {
       if (!user) {
@@ -64,7 +68,6 @@ export const resolvers: Resolvers = {
       }).save();
 
       delete newUser.password;
-      logger.debug('new user', newUser);
       return { user: newUser, token: createToken(newUser) };
     },
   },

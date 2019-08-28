@@ -10,10 +10,6 @@ export const typeDefs = gql`
     likes: Int!
   }
 
-  extend type User {
-    posts: [Post!]
-  }
-
   extend type Query {
     getPost(id: ID!): Post
     getPosts(offset: Int, limit: Int): [Post]!
