@@ -2,8 +2,10 @@ import { gql, makeExecutableSchema } from 'apollo-server';
 import { GraphQLScalarType, Kind } from 'graphql';
 import { merge } from 'lodash';
 
+import { resolvers as commentResolvers } from './resolvers/commentResolvers';
 import { resolvers as postResolvers } from './resolvers/postResolvers';
 import { resolvers as userResolvers } from './resolvers/userResolvers';
+import { typeDefs as commentTypeDefs } from './typeDefs/commentType';
 import { typeDefs as postTypeDefs } from './typeDefs/postType';
 import { typeDefs as userTypeDefs } from './typeDefs/userType';
 
@@ -47,8 +49,8 @@ const resolvers = {
 };
 
 const schema = makeExecutableSchema({
-  typeDefs: [typeDefs, userTypeDefs, postTypeDefs],
-  resolvers: merge(resolvers, userResolvers, postResolvers),
+  typeDefs: [typeDefs, userTypeDefs, postTypeDefs, commentTypeDefs],
+  resolvers: merge(resolvers, userResolvers, postResolvers, commentResolvers),
 });
 
 export default schema;

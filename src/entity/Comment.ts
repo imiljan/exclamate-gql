@@ -22,7 +22,7 @@ export class Comment extends BaseEntity {
   })
   post: Post;
 
-  @Column({ name: 'postBody', length: 180 })
+  @Column({ name: 'commentBody', length: 180 })
   body: string;
 
   @CreateDateColumn({ name: 'createdDate' })

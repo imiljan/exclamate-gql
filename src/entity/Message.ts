@@ -34,7 +34,7 @@ export class Message extends BaseEntity {
   })
   sender: User;
 
-  @ManyToOne(() => User, (user) => user.receiverMessages, {
+  @ManyToOne(() => User, (user) => user.receivedMessages, {
     primary: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',

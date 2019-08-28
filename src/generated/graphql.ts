@@ -13,6 +13,14 @@ export type Scalars = {
   Date: any,
 };
 
+export type Comment = {
+  __typename?: 'Comment',
+  id: Scalars['ID'],
+  body: Scalars['String'],
+  created: Scalars['Date'],
+  user: User,
+};
+
 
 export type Mutation = {
   __typename?: 'Mutation',
@@ -37,6 +45,7 @@ export type Post = {
   body: Scalars['String'],
   created: Scalars['Date'],
   user: User,
+  comments: Array<Maybe<Comment>>,
 };
 
 export type Query = {
@@ -168,6 +177,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Post: ResolverTypeWrapper<Post>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
+  Comment: ResolverTypeWrapper<Comment>,
   Mutation: ResolverTypeWrapper<{}>,
   RegisterInput: RegisterInput,
   RegisterResponse: ResolverTypeWrapper<RegisterResponse>,
@@ -183,9 +193,17 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'],
   Post: Post,
   Date: Scalars['Date'],
+  Comment: Comment,
   Mutation: {},
   RegisterInput: RegisterInput,
   RegisterResponse: RegisterResponse,
+}>;
+
+export type CommentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  created?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -203,6 +221,7 @@ export type PostResolvers<ContextType = Context, ParentType extends ResolversPar
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   created?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  comments?: Resolver<Array<Maybe<ResolversTypes['Comment']>>, ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -233,6 +252,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Comment?: CommentResolvers<ContextType>,
   Date?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,

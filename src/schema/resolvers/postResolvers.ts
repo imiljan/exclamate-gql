@@ -1,7 +1,8 @@
 import { ForbiddenError } from 'apollo-server';
 import { getLogger } from 'log4js';
-import { In } from 'typeorm';
+import { getManager, In } from 'typeorm';
 
+import { Comment } from '../../entity/Comment';
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
@@ -12,12 +13,26 @@ export const resolvers: Resolvers = {
   User: {
     posts: (_, __, { user }) => Post.find({ where: { user } }),
   },
+  Post: {
+    comments: (post, __, { user }) =>
+      Comment.find({ where: { post: post.id }, relations: ['user'] }),
+    // TODO Check if this can be achieved in query builder
+    likes: async (post: any, _: any, { user }: any) => {
+      const numberOfLikes = await getManager().query(
+        'select COUNT(DISTINCT l.userId) as likes from post p left join `like` l on p.postId = l.postId where l.postId =' +
+          post.id +
+          ';'
+      );
+      return numberOfLikes[0].likes;
+    },
+  },
   Query: {
     getPost: async (_, { id }, { user }) => {
       if (!user) {
         throw new ForbiddenError('User not logged in');
       }
-      const post = await Post.findOne({ where: { id }, relations: ['comments', 'medias'] });
+
+      const post = await Post.findOne({ where: { id }, relations: ['comments'] });
       return post ? post : null;
     },
     getPosts: async (_, __, { user }) => {
