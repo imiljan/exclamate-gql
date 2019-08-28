@@ -34,7 +34,7 @@ export const resolvers: Resolvers = {
       const post = await Post.findOne({ where: { id }, relations: ['comments'] });
       return post ? post : null;
     },
-    getPosts: async (_, __, { user }) => {
+    getPosts: async (_, { offset, limit }, { user }) => {
       if (!user) {
         throw new ForbiddenError('User not logged in');
       }
@@ -52,6 +52,8 @@ export const resolvers: Resolvers = {
           created: 'DESC',
           id: 'ASC',
         },
+        skip: offset ? offset : 0,
+        take: limit ? limit : 10,
       });
       // logger.info(p);
       return p;

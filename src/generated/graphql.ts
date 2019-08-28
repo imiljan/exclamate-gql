@@ -69,6 +69,12 @@ export type QueryGetPostArgs = {
   id: Scalars['ID']
 };
 
+
+export type QueryGetPostsArgs = {
+  offset?: Maybe<Scalars['Int']>,
+  limit?: Maybe<Scalars['Int']>
+};
+
 export type RegisterInput = {
   username: Scalars['String'],
   password: Scalars['String'],
@@ -232,7 +238,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   login?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'username' | 'password'>>,
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,
-  getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>,
+  getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType, QueryGetPostsArgs>,
 }>;
 
 export type RegisterResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RegisterResponse'] = ResolversParentTypes['RegisterResponse']> = ResolversObject<{
