@@ -7,7 +7,8 @@ export const typeDefs = gql`
     firstName: String!
     lastName: String!
     email: String!
-    posts: [Post]!
+    joinedDate: Date
+    posts: [Post]
   }
 
   type Token {

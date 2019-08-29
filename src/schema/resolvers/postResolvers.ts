@@ -11,7 +11,7 @@ import { Resolvers } from '../../generated/graphql';
 export const resolvers: Resolvers = {
   Post: {
     // TODO Check if this is needed because there is join on getPost query
-    comments: (post) => Comment.find({ where: { post: post.id }, relations: ['user'] }),
+    comments: (post) => Comment.find({ where: { postId: post.id }, relations: ['user'] }),
     // TODO Check if this can be achieved in query builder
     likes: async (post) => {
       const numberOfLikes = await getManager().query(

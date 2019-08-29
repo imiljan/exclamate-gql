@@ -27,6 +27,7 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']>,
   register: RegisterResponse,
   createPost: Post,
+  createComment: Comment,
 };
 
 
@@ -36,6 +37,12 @@ export type MutationRegisterArgs = {
 
 
 export type MutationCreatePostArgs = {
+  body: Scalars['String']
+};
+
+
+export type MutationCreateCommentArgs = {
+  postId: Scalars['Int'],
   body: Scalars['String']
 };
 
@@ -101,7 +108,7 @@ export type User = {
   firstName: Scalars['String'],
   lastName: Scalars['String'],
   email: Scalars['String'],
-  posts?: Maybe<Array<Post>>,
+  posts?: Maybe<Array<Maybe<Post>>>,
 };
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -222,6 +229,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   register?: Resolver<ResolversTypes['RegisterResponse'], ParentType, ContextType, MutationRegisterArgs>,
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body'>>,
+  createComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'postId' | 'body'>>,
 }>;
 
 export type PostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
@@ -256,7 +264,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  posts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>,
+  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{

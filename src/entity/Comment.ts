@@ -22,6 +22,9 @@ export class Comment extends BaseEntity {
   })
   post: Post;
 
+  @Column({ name: 'postId' })
+  postId: number;
+
   @Column({ name: 'commentBody', length: 180 })
   body: string;
 

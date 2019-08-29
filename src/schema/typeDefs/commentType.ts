@@ -7,4 +7,8 @@ export const typeDefs = gql`
     created: Date!
     user: User!
   }
+
+  extend type Mutation {
+    createComment(postId: Int!, body: String!): Comment!
+  }
 `;
