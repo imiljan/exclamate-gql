@@ -109,7 +109,11 @@ export type User = {
   lastName: Scalars['String'],
   email: Scalars['String'],
   joinedDate?: Maybe<Scalars['Date']>,
+  location?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
   posts?: Maybe<Array<Maybe<Post>>>,
+  following?: Maybe<Scalars['Int']>,
+  followers?: Maybe<Scalars['Int']>,
 };
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -266,7 +270,11 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   joinedDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
+  location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
+  following?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  followers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{

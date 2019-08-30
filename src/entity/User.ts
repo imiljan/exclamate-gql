@@ -38,6 +38,12 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   email: string;
 
+  @Column()
+  bio: string;
+
+  @Column({ length: 30 })
+  location: string;
+
   @CreateDateColumn()
   joinedDate: Date;
 

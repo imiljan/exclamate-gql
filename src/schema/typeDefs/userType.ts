@@ -8,7 +8,11 @@ export const typeDefs = gql`
     lastName: String!
     email: String!
     joinedDate: Date
+    location: String
+    bio: String
     posts: [Post]
+    following: Int
+    followers: Int
   }
 
   type Token {

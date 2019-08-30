@@ -1,7 +1,7 @@
 import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server';
 import * as bcrypt from 'bcrypt';
 import { getLogger } from 'log4js';
-import { Like } from 'typeorm';
+import { getManager, Like } from 'typeorm';
 
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
@@ -13,6 +13,32 @@ const logger = getLogger('userResolvers.ts');
 export const resolvers: Resolvers = {
   User: {
     posts: (_, __, { user }) => Post.find({ where: { user } }),
+
+    // TODO: try to optimize
+    followers: async (root, _, { user }) => {
+      const followersData = await getManager().query(
+        `SELECT COUNT(DISTINCT f.followingUserId) AS followers
+         FROM user u
+          LEFT JOIN follow f ON u.userId = f.followedUserId
+        WHERE u.userId = ${root.id};`
+      );
+
+      logger.info(followersData);
+
+      return followersData.pop().followers;
+    },
+    following: async (root, _, { user }) => {
+      const followingsData = await getManager().query(
+        `SELECT COUNT(DISTINCT f.followedUserId) AS followings
+         FROM user u
+          LEFT JOIN follow f ON u.userId = f.followingUserId
+        WHERE u.userId = ${root.id};`
+      );
+
+      logger.info(followingsData);
+
+      return followingsData.pop().followings;
+    },
   },
   Query: {
     me: (_, __, { user }) => {
