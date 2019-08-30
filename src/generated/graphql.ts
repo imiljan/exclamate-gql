@@ -85,7 +85,8 @@ export type QueryGetPostArgs = {
 
 export type QueryGetPostsArgs = {
   offset?: Maybe<Scalars['Int']>,
-  limit?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>,
+  searchParam?: Maybe<Scalars['String']>
 };
 
 export type RegisterInput = {

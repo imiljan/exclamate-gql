@@ -1,13 +1,12 @@
 import { ForbiddenError } from 'apollo-server';
-import { getLogger } from 'log4js';
-import { getManager, In } from 'typeorm';
+import { getManager, In, Like } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
 
-const logger = getLogger('postResolvers.ts');
+// const logger = getLogger('postResolvers.ts');
 
 export const resolvers: Resolvers = {
   Post: {
@@ -44,18 +43,30 @@ export const resolvers: Resolvers = {
       });
       return post ? post : null;
     },
-    getPosts: async (_, { offset, limit }, { user }) => {
+    getPosts: async (_, { offset, limit, searchParam }, { user }) => {
       if (!user) {
         throw new ForbiddenError('User not logged in');
       }
-      const whereConditions: any = [{ user }];
+
+      const whereConditions: any = [];
       const userWithFollowings = await User.findOne(user.id, { relations: ['followings'] });
 
       if (userWithFollowings && userWithFollowings.followings.length !== 0) {
-        whereConditions.push({ user: In(userWithFollowings.followings.map((e) => e.id)) });
+        if (!searchParam) {
+          // if no search params find users post and posts of followed users
+          whereConditions.push({
+            user: In([user.id, ...userWithFollowings.followings.map((e) => e.id)]),
+          });
+        } else {
+          // else find users post with body like searchParam and posts of followed users with searchParam
+          whereConditions.push({
+            user: In([user.id, ...userWithFollowings.followings.map((e) => e.id)]),
+            body: Like(`%${searchParam}%`),
+          });
+        }
       }
 
-      const p = await Post.find({
+      const posts = await Post.find({
         where: whereConditions,
         relations: ['comments'],
         order: {
@@ -65,8 +76,7 @@ export const resolvers: Resolvers = {
         skip: offset ? offset : 0,
         take: limit ? limit : 10,
       });
-      logger.info(p);
-      return p;
+      return posts;
     },
   },
   Mutation: {

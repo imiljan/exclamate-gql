@@ -38,10 +38,10 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   bio: string;
 
-  @Column({ length: 30 })
+  @Column({ length: 30, nullable: true })
   location: string;
 
   @CreateDateColumn()
