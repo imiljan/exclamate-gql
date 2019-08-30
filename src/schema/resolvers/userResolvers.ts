@@ -12,27 +12,27 @@ const logger = getLogger('userResolvers.ts');
 
 export const resolvers: Resolvers = {
   User: {
-    posts: (_, __, { user }) => Post.find({ where: { user } }),
+    posts: (user) => Post.find({ where: { user: user.id } }),
 
     // TODO: try to optimize
-    followers: async (root, _, { user }) => {
+    followers: async (user) => {
       const followersData = await getManager().query(
         `SELECT COUNT(DISTINCT f.followingUserId) AS followers
          FROM user u
           LEFT JOIN follow f ON u.userId = f.followedUserId
-        WHERE u.userId = ${root.id};`
+        WHERE u.userId = ${user.id};`
       );
 
       logger.info(followersData);
 
       return followersData.pop().followers;
     },
-    following: async (root, _, { user }) => {
+    following: async (user) => {
       const followingsData = await getManager().query(
         `SELECT COUNT(DISTINCT f.followedUserId) AS followings
          FROM user u
           LEFT JOIN follow f ON u.userId = f.followingUserId
-        WHERE u.userId = ${root.id};`
+        WHERE u.userId = ${user.id};`
       );
 
       logger.info(followingsData);
@@ -71,6 +71,18 @@ export const resolvers: Resolvers = {
         logger.error(error);
         throw error;
       }
+    },
+    getUser: async (_, { id }, { user }) => {
+      if (!user) {
+        throw new ForbiddenError('User not logged in');
+      }
+      const u = await User.findOne({ where: { id } });
+      logger.info(u);
+
+      if (!u) {
+        throw new ApolloError('There is no user with that id');
+      }
+      return u;
     },
   },
   Mutation: {

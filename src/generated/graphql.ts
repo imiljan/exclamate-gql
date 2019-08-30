@@ -61,6 +61,7 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>,
   login: Token,
   me: User,
+  getUser?: Maybe<User>,
   getPost?: Maybe<Post>,
   getPosts: Array<Maybe<Post>>,
 };
@@ -69,6 +70,11 @@ export type Query = {
 export type QueryLoginArgs = {
   username: Scalars['String'],
   password: Scalars['String']
+};
+
+
+export type QueryGetUserArgs = {
+  id: Scalars['Int']
 };
 
 
@@ -250,6 +256,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   login?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'username' | 'password'>>,
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,
   getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType, QueryGetPostsArgs>,
 }>;

@@ -1,4 +1,5 @@
 import { ForbiddenError } from 'apollo-server';
+import { getLogger } from 'log4js';
 import { getManager, In } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
@@ -6,7 +7,7 @@ import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
 
-// const logger = getLogger('postResolvers.ts');
+const logger = getLogger('postResolvers.ts');
 
 export const resolvers: Resolvers = {
   Post: {
@@ -23,12 +24,24 @@ export const resolvers: Resolvers = {
     },
   },
   Query: {
-    getPost: async (_, { id }, { user }) => {
+    getPost: async (_, { id }, { user }, info) => {
+      // logger.debug('**************');
+      // //@ts-ignore
+      // // logger.debug(info.fieldNodes[0].selectionSet.selections);
+      // //@ts-ignore
+      // info.fieldNodes[0].selectionSet.selections.forEach((el, index) => {
+      //   logger.debug(`index: ${index}`);
+      //   logger.debug(el);
+      // });
+      // logger.debug('**************');
       if (!user) {
         throw new ForbiddenError('User not logged in');
       }
 
-      const post = await Post.findOne({ where: { id }, relations: ['comments'] });
+      const post = await Post.findOne({
+        where: { id },
+        relations: ['comments'],
+      });
       return post ? post : null;
     },
     getPosts: async (_, { offset, limit }, { user }) => {
@@ -52,7 +65,7 @@ export const resolvers: Resolvers = {
         skip: offset ? offset : 0,
         take: limit ? limit : 10,
       });
-      // logger.info(p);
+      logger.info(p);
       return p;
     },
   },
