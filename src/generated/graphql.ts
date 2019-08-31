@@ -62,6 +62,7 @@ export type Query = {
   login: Token,
   me: User,
   getUser?: Maybe<User>,
+  getUsers: Array<Maybe<User>>,
   getPost?: Maybe<Post>,
   getPosts: Array<Maybe<Post>>,
 };
@@ -78,6 +79,11 @@ export type QueryGetUserArgs = {
 };
 
 
+export type QueryGetUsersArgs = {
+  searchParam: Scalars['String']
+};
+
+
 export type QueryGetPostArgs = {
   id: Scalars['ID']
 };
@@ -85,8 +91,7 @@ export type QueryGetPostArgs = {
 
 export type QueryGetPostsArgs = {
   offset?: Maybe<Scalars['Int']>,
-  limit?: Maybe<Scalars['Int']>,
-  searchParam?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
 };
 
 export type RegisterInput = {
@@ -258,6 +263,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   login?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'username' | 'password'>>,
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>,
+  getUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetUsersArgs, 'searchParam'>>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,
   getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType, QueryGetPostsArgs>,
 }>;

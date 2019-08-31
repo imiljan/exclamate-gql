@@ -36,6 +36,7 @@ export const typeDefs = gql`
     login(username: String!, password: String!): Token!
     me: User!
     getUser(id: Int!): User
+    getUsers(searchParam: String!): [User]!
   }
 
   extend type Mutation {

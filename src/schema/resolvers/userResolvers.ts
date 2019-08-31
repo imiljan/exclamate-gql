@@ -84,6 +84,17 @@ export const resolvers: Resolvers = {
       }
       return u;
     },
+    getUsers: (_, { searchParam }, { user }) => {
+      if (!user) {
+        throw new ForbiddenError('User not logged in');
+      }
+
+      const users = User.find({ where: { username: Like(`%${searchParam}%`) } });
+      if (!users) {
+        return [];
+      }
+      return users;
+    },
   },
   Mutation: {
     register: async (_, { userData }) => {

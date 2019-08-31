@@ -1,5 +1,5 @@
 import { ForbiddenError } from 'apollo-server';
-import { getManager, In, Like } from 'typeorm';
+import { getManager, In } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
 import { Post } from '../../entity/Post';
@@ -43,27 +43,18 @@ export const resolvers: Resolvers = {
       });
       return post ? post : null;
     },
-    getPosts: async (_, { offset, limit, searchParam }, { user }) => {
+    getPosts: async (_, { offset, limit }, { user }) => {
       if (!user) {
         throw new ForbiddenError('User not logged in');
       }
 
-      const whereConditions: any = [];
+      const whereConditions: any = [{ user }];
       const userWithFollowings = await User.findOne(user.id, { relations: ['followings'] });
 
       if (userWithFollowings && userWithFollowings.followings.length !== 0) {
-        if (!searchParam) {
-          // if no search params find users post and posts of followed users
-          whereConditions.push({
-            user: In([user.id, ...userWithFollowings.followings.map((e) => e.id)]),
-          });
-        } else {
-          // else find users post with body like searchParam and posts of followed users with searchParam
-          whereConditions.push({
-            user: In([user.id, ...userWithFollowings.followings.map((e) => e.id)]),
-            body: Like(`%${searchParam}%`),
-          });
-        }
+        whereConditions.push({
+          user: In([user.id, ...userWithFollowings.followings.map((e) => e.id)]),
+        });
       }
 
       const posts = await Post.find({
