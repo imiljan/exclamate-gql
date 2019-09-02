@@ -1,4 +1,3 @@
-import { ForbiddenError } from 'apollo-server';
 import { getManager, In } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
@@ -33,9 +32,6 @@ export const resolvers: Resolvers = {
       //   logger.debug(el);
       // });
       // logger.debug('**************');
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
 
       const post = await Post.findOne({
         where: { id },
@@ -44,10 +40,6 @@ export const resolvers: Resolvers = {
       return post ? post : null;
     },
     getPosts: async (_, { offset, limit }, { user }) => {
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
-
       const whereConditions: any = [{ user }];
       const userWithFollowings = await User.findOne(user.id, { relations: ['followings'] });
 
@@ -72,9 +64,6 @@ export const resolvers: Resolvers = {
   },
   Mutation: {
     createPost: async (_, { body }, { user }) => {
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
       const newPost = await Post.create({ body, user }).save();
       return newPost;
     },

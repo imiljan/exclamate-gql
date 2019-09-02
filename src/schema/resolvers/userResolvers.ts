@@ -42,9 +42,6 @@ export const resolvers: Resolvers = {
   },
   Query: {
     me: (_, __, { user }) => {
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
       return user;
     },
     login: async (_, { username, password }) => {
@@ -73,9 +70,6 @@ export const resolvers: Resolvers = {
       }
     },
     getUser: async (_, { id }, { user }) => {
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
       const u = await User.findOne({ where: { id } });
       logger.info(u);
 
@@ -85,10 +79,6 @@ export const resolvers: Resolvers = {
       return u;
     },
     getUsers: (_, { searchParam }, { user }) => {
-      if (!user) {
-        throw new ForbiddenError('User not logged in');
-      }
-
       const users = User.find({ where: { username: Like(`%${searchParam}%`) } });
       if (!users) {
         return [];

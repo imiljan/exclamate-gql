@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, ForbiddenError } from 'apollo-server';
 import * as dotenv from 'dotenv';
 import * as log4js from 'log4js';
 import { createConnection } from 'typeorm';
@@ -31,9 +31,12 @@ createConnection()
     const server = new ApolloServer({
       schema,
       context: ({ req }) => {
+        if (req.body.query.includes('login') || req.body.query.includes('register')) {
+          return { user: null };
+        }
         const token: string = req.headers.authorization || '';
         if (token === '') {
-          return { user: null };
+          throw new ForbiddenError('User not logged in');
         }
         return getUser(token.split(' ')[1]).then((user) => ({ user }));
       },
