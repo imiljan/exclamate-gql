@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { ApolloServer, ForbiddenError } from 'apollo-server';
 import * as dotenv from 'dotenv';
 import * as log4js from 'log4js';
+import * as mkdirp from 'mkdirp';
 import { createConnection } from 'typeorm';
 
 import { User } from './entity/User';
@@ -26,6 +27,9 @@ export interface Context {
   user: User;
 }
 
+export const UPLOAD_DIR = '../uploads';
+mkdirp.sync(UPLOAD_DIR);
+
 createConnection()
   .then(() => {
     const server = new ApolloServer({
@@ -39,6 +43,7 @@ createConnection()
           throw new ForbiddenError('User not logged in');
         }
         return getUser(token.split(' ')[1]).then((user) => ({ user }));
+        // return { user: null };
       },
     });
 

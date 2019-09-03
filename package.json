@@ -11,6 +11,7 @@
     "generate:watch": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
+    "@types/shortid": "0.0.29",
     "apollo-server": "^2.9.0",
     "bcrypt": "^3.0.6",
     "dotenv": "^8.1.0",
@@ -20,6 +21,7 @@
     "log4js": "^4.5.1",
     "mysql": "^2.17.1",
     "reflect-metadata": "^0.1.10",
+    "shortid": "^2.2.14",
     "typeorm": "0.2.18"
   },
   "devDependencies": {

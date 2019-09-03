@@ -3,9 +3,11 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import { merge } from 'lodash';
 
 import { resolvers as commentResolvers } from './resolvers/commentResolvers';
+import { resolvers as mediaResolvers } from './resolvers/mediaResolvers';
 import { resolvers as postResolvers } from './resolvers/postResolvers';
 import { resolvers as userResolvers } from './resolvers/userResolvers';
 import { typeDefs as commentTypeDefs } from './typeDefs/commentType';
+import { typeDefs as mediaTypeDefs } from './typeDefs/mediaType';
 import { typeDefs as postTypeDefs } from './typeDefs/postType';
 import { typeDefs as userTypeDefs } from './typeDefs/userType';
 
@@ -49,8 +51,8 @@ const resolvers = {
 };
 
 const schema = makeExecutableSchema({
-  typeDefs: [typeDefs, userTypeDefs, postTypeDefs, commentTypeDefs],
-  resolvers: merge(resolvers, userResolvers, postResolvers, commentResolvers),
+  typeDefs: [typeDefs, userTypeDefs, postTypeDefs, commentTypeDefs, mediaTypeDefs],
+  resolvers: merge(resolvers, userResolvers, postResolvers, commentResolvers, mediaResolvers),
 });
 
 export default schema;
