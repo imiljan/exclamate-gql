@@ -35,11 +35,14 @@ export const typeDefs = gql`
   extend type Query {
     login(username: String!, password: String!): Token!
     me: User!
-    getUser(id: Int!): User
+    getUser(id: ID!): User
     getUsers(searchParam: String!): [User]!
+    canFollow(userId: ID!): Boolean!
   }
 
   extend type Mutation {
     register(userData: RegisterInput): RegisterResponse!
+    follow(userId: ID!): Boolean!
+    unfollow(userId: ID!): Boolean!
   }
 `;

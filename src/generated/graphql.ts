@@ -26,6 +26,8 @@ export type Mutation = {
   __typename?: 'Mutation',
   _?: Maybe<Scalars['Boolean']>,
   register: RegisterResponse,
+  follow: Scalars['Boolean'],
+  unfollow: Scalars['Boolean'],
   createPost: Post,
   deletePost: Scalars['Boolean'],
   editPost: Post,
@@ -35,6 +37,16 @@ export type Mutation = {
 
 export type MutationRegisterArgs = {
   userData?: Maybe<RegisterInput>
+};
+
+
+export type MutationFollowArgs = {
+  userId: Scalars['ID']
+};
+
+
+export type MutationUnfollowArgs = {
+  userId: Scalars['ID']
 };
 
 
@@ -76,6 +88,7 @@ export type Query = {
   me: User,
   getUser?: Maybe<User>,
   getUsers: Array<Maybe<User>>,
+  canFollow: Scalars['Boolean'],
   getPost?: Maybe<Post>,
   getPosts: Array<Maybe<Post>>,
 };
@@ -88,12 +101,17 @@ export type QueryLoginArgs = {
 
 
 export type QueryGetUserArgs = {
-  id: Scalars['Int']
+  id: Scalars['ID']
 };
 
 
 export type QueryGetUsersArgs = {
   searchParam: Scalars['String']
+};
+
+
+export type QueryCanFollowArgs = {
+  userId: Scalars['ID']
 };
 
 
@@ -258,6 +276,8 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   register?: Resolver<ResolversTypes['RegisterResponse'], ParentType, ContextType, MutationRegisterArgs>,
+  follow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationFollowArgs, 'userId'>>,
+  unfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnfollowArgs, 'userId'>>,
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body'>>,
   deletePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'postId'>>,
   editPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationEditPostArgs, 'postId' | 'body'>>,
@@ -279,6 +299,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>,
   getUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetUsersArgs, 'searchParam'>>,
+  canFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanFollowArgs, 'userId'>>,
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>,
   getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType, QueryGetPostsArgs>,
 }>;

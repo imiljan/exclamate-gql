@@ -1,7 +1,7 @@
 import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server';
 import * as bcrypt from 'bcrypt';
 import { getLogger } from 'log4js';
-import { getManager, Like } from 'typeorm';
+import { getConnection, getManager, Like } from 'typeorm';
 
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
@@ -85,6 +85,24 @@ export const resolvers: Resolvers = {
       }
       return users;
     },
+    canFollow: (_, { userId }, { user }) => {
+      return getManager()
+        .query(
+          `SELECT f.followedUserId AS following
+           FROM user u
+            LEFT JOIN follow f ON u.userId = f.followingUserId
+           WHERE u.userId = ${user.id};`
+        )
+        .then((res: Array<{ following: number }>) => {
+          logger.info(res);
+          for (const rowDataPacket of res) {
+            if (rowDataPacket.following == userId) {
+              return false;
+            }
+          }
+          return true;
+        });
+    },
   },
   Mutation: {
     register: async (_, { userData }) => {
@@ -108,6 +126,42 @@ export const resolvers: Resolvers = {
 
       delete newUser.password;
       return { user: newUser, token: createToken(newUser) };
+    },
+    follow: (_, { userId }, { user }) => {
+      return User.findOne(userId).then((followUser) => {
+        if (!followUser) {
+          throw new ApolloError('User does not exist');
+        }
+        return getConnection()
+          .createQueryBuilder()
+          .relation(User, 'followings')
+          .of(user)
+          .add(followUser)
+          .then((res) => {
+            return true;
+          })
+          .catch((err) => {
+            return false;
+          });
+      });
+    },
+    unfollow: (_, { userId }, { user }) => {
+      return User.findOne(userId).then((followUser) => {
+        if (!followUser) {
+          throw new ApolloError('User does not exist');
+        }
+        return getConnection()
+          .createQueryBuilder()
+          .relation(User, 'followings')
+          .of(user)
+          .remove(followUser)
+          .then((res) => {
+            return true;
+          })
+          .catch((err) => {
+            return false;
+          });
+      });
     },
   },
 };
