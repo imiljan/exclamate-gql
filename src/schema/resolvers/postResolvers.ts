@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-server';
 import { getManager, In } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
@@ -66,6 +67,27 @@ export const resolvers: Resolvers = {
     createPost: async (_, { body }, { user }) => {
       const newPost = await Post.create({ body, user }).save();
       return newPost;
+    },
+    deletePost: (_, { postId }) => {
+      return Post.findOne(postId).then((post) => {
+        if (post) {
+          post.remove();
+          return true;
+        }
+        return false;
+      });
+    },
+    editPost: (_, { postId, body }) => {
+      return Post.findOne(postId).then((post) => {
+        if (post) {
+          post.body = body.trim();
+          return post.save().then((res) => {
+            return post;
+          });
+        } else {
+          throw new ApolloError('Post not edited');
+        }
+      });
     },
   },
 };

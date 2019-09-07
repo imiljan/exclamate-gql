@@ -27,6 +27,8 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']>,
   register: RegisterResponse,
   createPost: Post,
+  deletePost: Scalars['Boolean'],
+  editPost: Post,
   createComment: Comment,
 };
 
@@ -37,6 +39,17 @@ export type MutationRegisterArgs = {
 
 
 export type MutationCreatePostArgs = {
+  body: Scalars['String']
+};
+
+
+export type MutationDeletePostArgs = {
+  postId: Scalars['ID']
+};
+
+
+export type MutationEditPostArgs = {
+  postId: Scalars['ID'],
   body: Scalars['String']
 };
 
@@ -246,6 +259,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   register?: Resolver<ResolversTypes['RegisterResponse'], ParentType, ContextType, MutationRegisterArgs>,
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body'>>,
+  deletePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'postId'>>,
+  editPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationEditPostArgs, 'postId' | 'body'>>,
   createComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'postId' | 'body'>>,
 }>;
 

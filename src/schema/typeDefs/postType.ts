@@ -17,5 +17,7 @@ export const typeDefs = gql`
 
   extend type Mutation {
     createPost(body: String!): Post!
+    deletePost(postId: ID!): Boolean!
+    editPost(postId: ID!, body: String!): Post!
   }
 `;
