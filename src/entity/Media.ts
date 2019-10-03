@@ -10,6 +10,6 @@ export class Media extends BaseEntity {
   @Column()
   url: string;
 
-  @ManyToOne((type) => Post, (post) => post.medias, { nullable: true })
+  @ManyToOne(() => Post, (post) => post.medias, { nullable: true })
   post: Post;
 }

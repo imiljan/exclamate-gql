@@ -7,6 +7,9 @@ export class Device extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', name: 'deviceId' })
   id: string;
 
-  @ManyToOne((type) => User, (user) => user.devices, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.devices, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 }

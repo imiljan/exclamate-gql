@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server';
+import { ApolloError } from 'apollo-server-express';
 import { getManager, In } from 'typeorm';
 
 import { Comment } from '../../entity/Comment';
@@ -15,15 +15,15 @@ export const resolvers: Resolvers = {
     // TODO Check if this can be achieved in query builder
     likes: async (post) => {
       const numberOfLikes = await getManager().query(
-        'select COUNT(DISTINCT l.userId) as likes from post p left join `like` l on p.postId = l.postId where l.postId =' +
-          post.id +
-          ';'
+        `select COUNT(DISTINCT l.userId) as likes from post p 
+                    left join \`like\` l on p.postId = l.postId 
+                  where l.postId = ${post.id};`,
       );
       return parseInt(numberOfLikes[0].likes, 10);
     },
   },
   Query: {
-    getPost: async (_, { id }, { user }, info) => {
+    getPost: async (_, { id }) => {
       // logger.debug('**************');
       // //@ts-ignore
       // // logger.debug(info.fieldNodes[0].selectionSet.selections);
@@ -42,7 +42,9 @@ export const resolvers: Resolvers = {
     },
     getPosts: async (_, { offset, limit }, { user }) => {
       const whereConditions: any = [{ user }];
-      const userWithFollowings = await User.findOne(user.id, { relations: ['followings'] });
+      const userWithFollowings = await User.findOne(user.id, {
+        relations: ['followings'],
+      });
 
       if (userWithFollowings && userWithFollowings.followings.length !== 0) {
         whereConditions.push({
@@ -50,7 +52,7 @@ export const resolvers: Resolvers = {
         });
       }
 
-      const posts = await Post.find({
+      return await Post.find({
         where: whereConditions,
         relations: ['comments'],
         order: {
@@ -60,34 +62,30 @@ export const resolvers: Resolvers = {
         skip: offset ? offset : 0,
         take: limit ? limit : 10,
       });
-      return posts;
     },
   },
   Mutation: {
     createPost: async (_, { body }, { user }) => {
-      const newPost = await Post.create({ body, user }).save();
-      return newPost;
+      return await Post.create({ body, user }).save();
     },
     deletePost: (_, { postId }) => {
       return Post.findOne(postId).then((post) => {
         if (post) {
-          post.remove();
-          return true;
+          return post.remove().then(() => true);
         }
         return false;
       });
     },
-    editPost: (_, { postId, body }) => {
-      return Post.findOne(postId).then((post) => {
-        if (post) {
-          post.body = body.trim();
-          return post.save().then((res) => {
-            return post;
-          });
-        } else {
-          throw new ApolloError('Post not edited');
-        }
-      });
+    editPost: async (_, { postId, body }) => {
+      const post = await Post.findOne(postId);
+
+      if (post) {
+        post.body = body.trim();
+        await post.save();
+        return post;
+      } else {
+        throw new ApolloError('Post not edited');
+      }
     },
   },
 };

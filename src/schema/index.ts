@@ -1,7 +1,7 @@
-import { gql, makeExecutableSchema } from 'apollo-server';
+import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { GraphQLScalarType, Kind } from 'graphql';
 import { merge } from 'lodash';
-
+import { Resolvers } from '../generated/graphql';
 import { resolvers as commentResolvers } from './resolvers/commentResolvers';
 import { resolvers as postResolvers } from './resolvers/postResolvers';
 import { resolvers as userResolvers } from './resolvers/userResolvers';
@@ -20,7 +20,7 @@ const typeDefs = gql`
   scalar Date
 `;
 
-const resolvers = {
+const resolvers: Resolvers = {
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',

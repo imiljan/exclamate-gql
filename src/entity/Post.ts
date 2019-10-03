@@ -25,23 +25,23 @@ export class Post extends BaseEntity {
   @CreateDateColumn({ name: 'createdDate' })
   created: Date;
 
-  @ManyToOne((type) => User, (user) => user.posts, {
+  @ManyToOne(() => User, (user) => user.posts, {
     eager: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   user: User;
 
-  @OneToMany((type) => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @OneToMany((type) => Media, (media) => media.post)
+  @OneToMany(() => Media, (media) => media.post)
   medias: Media[];
 
-  @ManyToMany((type) => User, (user) => user.reposts)
+  @ManyToMany(() => User, (user) => user.reposts)
   usersReposted: User[];
 
-  @ManyToMany((type) => User)
+  @ManyToMany(() => User)
   @JoinTable({
     name: 'like',
     joinColumn: { name: 'postId', referencedColumnName: 'id' },

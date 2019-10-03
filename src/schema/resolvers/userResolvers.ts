@@ -1,12 +1,12 @@
-import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server';
-import * as bcrypt from 'bcrypt';
+import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server-express';
+import bcrypt from 'bcrypt';
 import { getLogger } from 'log4js';
 import { getConnection, getManager, Like } from 'typeorm';
 
 import { Post } from '../../entity/Post';
 import { User } from '../../entity/User';
 import { Resolvers } from '../../generated/graphql';
-import { createToken } from '../../util/auth';
+import { createAccessToken } from '../../util/authTokens';
 
 const logger = getLogger('userResolvers.ts');
 
@@ -20,7 +20,7 @@ export const resolvers: Resolvers = {
         `SELECT COUNT(DISTINCT f.followingUserId) AS followers
          FROM user u
           LEFT JOIN follow f ON u.userId = f.followedUserId
-        WHERE u.userId = ${user.id};`
+        WHERE u.userId = ${user.id};`,
       );
 
       logger.info(followersData);
@@ -32,7 +32,7 @@ export const resolvers: Resolvers = {
         `SELECT COUNT(DISTINCT f.followedUserId) AS followings
          FROM user u
           LEFT JOIN follow f ON u.userId = f.followingUserId
-        WHERE u.userId = ${user.id};`
+        WHERE u.userId = ${user.id};`,
       );
 
       logger.info(followingsData);
@@ -59,7 +59,7 @@ export const resolvers: Resolvers = {
 
         if (await bcrypt.compare(password, user.password)) {
           return {
-            token: createToken(user),
+            token: createAccessToken(user),
           };
         } else {
           throw new AuthenticationError('Invalid password');
@@ -69,7 +69,7 @@ export const resolvers: Resolvers = {
         throw error;
       }
     },
-    getUser: async (_, { id }, { user }) => {
+    getUser: async (_, { id }) => {
       const u = await User.findOne({ where: { id } });
       logger.info(u);
 
@@ -78,8 +78,10 @@ export const resolvers: Resolvers = {
       }
       return u;
     },
-    getUsers: (_, { searchParam }, { user }) => {
-      const users = User.find({ where: { username: Like(`%${searchParam}%`) } });
+    getUsers: (_, { searchParam }) => {
+      const users = User.find({
+        where: { username: Like(`%${searchParam}%`) },
+      });
       if (!users) {
         return [];
       }
@@ -91,7 +93,7 @@ export const resolvers: Resolvers = {
           `SELECT f.followedUserId AS following
            FROM user u
             LEFT JOIN follow f ON u.userId = f.followingUserId
-           WHERE u.userId = ${user.id};`
+           WHERE u.userId = ${user.id};`,
         )
         .then((res: Array<{ following: number }>) => {
           logger.info(res);
@@ -125,7 +127,7 @@ export const resolvers: Resolvers = {
       }).save();
 
       delete newUser.password;
-      return { user: newUser, token: createToken(newUser) };
+      return { user: newUser, token: createAccessToken(newUser) };
     },
     follow: (_, { userId }, { user }) => {
       return User.findOne(userId).then((followUser) => {
@@ -137,10 +139,10 @@ export const resolvers: Resolvers = {
           .relation(User, 'followings')
           .of(user)
           .add(followUser)
-          .then((res) => {
+          .then(() => {
             return true;
           })
-          .catch((err) => {
+          .catch(() => {
             return false;
           });
       });
@@ -155,10 +157,10 @@ export const resolvers: Resolvers = {
           .relation(User, 'followings')
           .of(user)
           .remove(followUser)
-          .then((res) => {
+          .then(() => {
             return true;
           })
-          .catch((err) => {
+          .catch(() => {
             return false;
           });
       });

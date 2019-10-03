@@ -10,7 +10,7 @@ export class Notification extends BaseEntity {
   @Column({ name: 'notificationBody', length: 100 })
   body: string;
 
-  @ManyToOne((type) => User, (user) => user.notifications, {
+  @ManyToOne(() => User, (user) => user.notifications, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

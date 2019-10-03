@@ -1,11 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Post } from './Post';
 import { User } from './User';
@@ -15,7 +8,7 @@ export class Comment extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'commentId' })
   id: number;
 
-  @ManyToOne((type) => Post, (post) => post.comments, {
+  @ManyToOne(() => Post, (post) => post.comments, {
     primary: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
@@ -31,6 +24,9 @@ export class Comment extends BaseEntity {
   @CreateDateColumn({ name: 'createdDate' })
   created: Date;
 
-  @ManyToOne((type) => User, (user) => user.comments, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.comments, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 }

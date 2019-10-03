@@ -8,8 +8,7 @@ export const resolvers: Resolvers = {
   Query: {},
   Mutation: {
     createComment: async (_, { postId, body }, { user }) => {
-      const newComment = await Comment.create({ postId, body, user }).save();
-      return newComment;
+      return await Comment.create({ postId, body, user }).save();
     },
   },
 };
