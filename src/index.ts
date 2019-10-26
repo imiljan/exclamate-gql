@@ -1,11 +1,13 @@
+import 'dotenv/config';
+
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import 'dotenv/config';
 import express, { Application } from 'express';
 import http from 'http';
 import log4js from 'log4js';
 import { createConnection } from 'typeorm';
+
 import { User } from './entity/User';
 import schema from './schema';
 import { getUser } from './util/authTokens';
@@ -77,7 +79,7 @@ createConnection()
     httpServer.listen({ port }, () => {
       console.log(`🚀 Server ready at http://localhost:${port}${apolloServer.graphqlPath}`);
       console.log(
-        `🚀 Subscriptions ready at ws://localhost:${port}${apolloServer.subscriptionsPath}`,
+        `🚀 Subscriptions ready at ws://localhost:${port}${apolloServer.subscriptionsPath}`
       );
     });
   })

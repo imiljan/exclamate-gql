@@ -1,3 +1,4 @@
+import { Field, ID, Int, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -18,34 +19,49 @@ import { Message } from './Message';
 import { Notification } from './Notification';
 import { Post } from './Post';
 
+@ObjectType()
 @Entity()
 export class User extends BaseEntity {
+  @Field(() => ID)
   @PrimaryGeneratedColumn({ name: 'userId' })
   id: number;
 
+  @Field()
   @Column({ length: 30 })
   username: string;
 
   @Column({ length: 255 })
   password: string;
 
+  @Field()
   @Column({ length: 30 })
   firstName: string;
 
+  @Field()
   @Column({ length: 30 })
   lastName: string;
 
+  @Field()
   @Column({ length: 50 })
   email: string;
 
+  @Field({ nullable: true })
   @Column({ nullable: true })
   bio: string;
 
+  @Field({ nullable: true })
   @Column({ length: 30, nullable: true })
   location: string;
 
+  @Field()
   @CreateDateColumn()
   joinedDate: Date;
+
+  @Field(() => Int, { nullable: true })
+  followers: number;
+
+  @Field(() => Int, { nullable: true })
+  following: number;
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];

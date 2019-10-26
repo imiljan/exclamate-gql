@@ -8,9 +8,20 @@
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "prettier": "prettier 'src/**/*.ts' --check ",
-    "prettier:fix": "prettier 'src/**/*.ts' --write ",
-    "generate": "graphql-codegen --config codegen.yml",
-    "generate:watch": "graphql-codegen --config codegen.yml --watch"
+    "prettier:fix": "prettier 'src/**/*.ts' --write",
+    "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts}'",
+    "lint:fix": "tsc --noEmit && eslint 'src/**/*.{js,ts}' --quiet --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc --noEmit && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint 'src/**/*.{js,ts}' --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "apollo-server-express": "^2.9.4",
@@ -25,12 +36,10 @@
     "log4js": "^4.5.1",
     "mysql": "^2.17.1",
     "reflect-metadata": "^0.1.10",
+    "type-graphql": "^0.17.5",
     "typeorm": "0.2.18"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.7.0",
-    "@graphql-codegen/typescript": "1.6.1",
-    "@graphql-codegen/typescript-resolvers": "1.6.1",
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.6",
@@ -39,11 +48,16 @@
     "@types/jsonwebtoken": "^8.3.4",
     "@types/lodash": "^4.14.141",
     "@types/node": "^10.14.19",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
     "nodemon": "^1.19.3",
     "prettier": "^1.18.2",
     "ts-node": "3.3.0",
-    "tslint": "^5.20.0",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.3"
   }
 }

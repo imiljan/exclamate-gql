@@ -1,3 +1,4 @@
+import { Field, Int, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -14,17 +15,22 @@ import { Comment } from './Comment';
 import { Media } from './Media';
 import { User } from './User';
 
+@ObjectType()
 @Entity()
 export class Post extends BaseEntity {
+  @Field(() => Int)
   @PrimaryGeneratedColumn({ name: 'postId' })
   id: number;
 
+  @Field()
   @Column({ name: 'postBody', length: 180 })
   body: string;
 
+  @Field()
   @CreateDateColumn({ name: 'createdDate' })
   created: Date;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.posts, {
     eager: true,
     onDelete: 'CASCADE',
@@ -32,6 +38,7 @@ export class Post extends BaseEntity {
   })
   user: User;
 
+  @Field(() => [Comment])
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
@@ -49,5 +56,6 @@ export class Post extends BaseEntity {
   })
   usersLiked: User[];
 
+  @Field(() => Int)
   likes: number;
 }
