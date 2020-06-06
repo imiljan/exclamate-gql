@@ -13,7 +13,7 @@
     "generate:watch": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
-    "apollo-server-express": "^2.9.4",
+    "apollo-server-express": "^2.14.2",
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
